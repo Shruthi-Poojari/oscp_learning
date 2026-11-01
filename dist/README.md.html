@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OSCP Prep Repository — Shruthi Poojari | OSCP Notes</title>
+  <link rel="stylesheet" href="/oscp_learning/static/style.css">
+  <style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #49483e }
+.codehilite { background: #272822; color: #F8F8F2 }
+.codehilite .c { color: #959077 } /* Comment */
+.codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+.codehilite .esc { color: #F8F8F2 } /* Escape */
+.codehilite .g { color: #F8F8F2 } /* Generic */
+.codehilite .k { color: #66D9EF } /* Keyword */
+.codehilite .l { color: #AE81FF } /* Literal */
+.codehilite .n { color: #F8F8F2 } /* Name */
+.codehilite .o { color: #FF4689 } /* Operator */
+.codehilite .x { color: #F8F8F2 } /* Other */
+.codehilite .p { color: #F8F8F2 } /* Punctuation */
+.codehilite .ch { color: #959077 } /* Comment.Hashbang */
+.codehilite .cm { color: #959077 } /* Comment.Multiline */
+.codehilite .cp { color: #959077 } /* Comment.Preproc */
+.codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #959077 } /* Comment.Single */
+.codehilite .cs { color: #959077 } /* Comment.Special */
+.codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+.codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #FF4689 } /* Generic.Error */
+.codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+.codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+.codehilite .go { color: #66D9EF } /* Generic.Output */
+.codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #959077 } /* Generic.Subheading */
+.codehilite .gt { color: #66D9EF } /* Generic.Traceback */
+.codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+.codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+.codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+.codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+.codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+.codehilite .kt { color: #66D9EF } /* Keyword.Type */
+.codehilite .ld { color: #E6DB74 } /* Literal.Date */
+.codehilite .m { color: #AE81FF } /* Literal.Number */
+.codehilite .s { color: #E6DB74 } /* Literal.String */
+.codehilite .na { color: #A6E22E } /* Name.Attribute */
+.codehilite .nb { color: #A6E22E } /* Name.Builtin */
+.codehilite .nc { color: #A6E22E } /* Name.Class */
+.codehilite .no { color: #66D9EF } /* Name.Constant */
+.codehilite .nd { color: #A6E22E } /* Name.Decorator */
+.codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+.codehilite .ne { color: #A6E22E } /* Name.Exception */
+.codehilite .nf { color: #A6E22E } /* Name.Function */
+.codehilite .nl { color: #F8F8F2 } /* Name.Label */
+.codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+.codehilite .nx { color: #A6E22E } /* Name.Other */
+.codehilite .py { color: #F8F8F2 } /* Name.Property */
+.codehilite .nt { color: #FF4689 } /* Name.Tag */
+.codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+.codehilite .ow { color: #FF4689 } /* Operator.Word */
+.codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+.codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+.codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+.codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+.codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+.codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+.codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+.codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+.codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+.codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+.codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+.codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+.codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+.codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+.codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+.codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+.codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+.codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+.codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+.codehilite .bp { color: #A6E22E } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+.codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+.codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+.codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+.codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+.codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */</style>
+  <script>
+    // Set theme before paint to avoid a flash of the wrong theme.
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/oscp_learning/index.html">Shruthi&nbsp;Poojari<span class="brand-sub">OSCP Notes &amp; Machines</span></a>
+    <input id="filter" type="search" placeholder="Filter notes…" autocomplete="off">
+    <nav>
+      
+      <div class="group">
+        <h3>General</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/OSCP-Methodology.md.html">OSCP Methodology — Master Guide</a>
+          </li>
+          
+          <li>
+            <a class="active"
+               href="/oscp_learning/README.md.html">OSCP Prep Repository</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Notes</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/DNS.md.html">Notes — DNS (53)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/FTP.md.html">Notes — FTP (21)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/File-Transfer.md.html">Notes — File Transfer</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/HTTP.md.html">Notes — HTTP / HTTPS (80 / 443 / 8080 / 8443)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/LDAP.md.html">Notes — LDAP (389 / 636)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/MSSQL.md.html">Notes — MSSQL (1433)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Metasploit.md.html">Notes — Metasploit Framework</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Nmap.md.html">Notes — Nmap</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/PrivEsc.md.html">Notes — Privilege Escalation</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Reverse-Shells.md.html">Notes — Reverse Shells & Shell Upgrades</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/SMB.md.html">Notes — SMB (139 / 445)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/WinRM.md.html">Notes — WinRM (5985 / 5986)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/References.md.html">OSCP — References & Resources</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>HTB Machines</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Enigma.md.html">HTB — Enigma</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Lame.md.html">HTB — Lame</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Legacy.md.html">HTB — Legacy</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Samples</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Lame-7h3rAm-writeup.md.html">Lame-7h3rAm-writeup</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Legacy-7h3rAm-writeup.md.html">Legacy-7h3rAm-writeup</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </nav>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <a class="topbar-brand" href="/oscp_learning/index.html">
+        <span class="dot"></span> OSCP Notes <b>&amp; Machines</b>
+      </a>
+      <nav class="topbar-links">
+        <a href="/oscp_learning/OSCP-Methodology.md.html">Methodology</a>
+        <a href="/oscp_learning/Notes/Nmap.md.html">Notes</a>
+        <a href="/oscp_learning/HTB/Lame.md.html">Machines</a>
+        
+        <a href="https://github.com/Shruthi-Poojari/oscp_learning" target="_blank" rel="noopener" class="icon-link" title="GitHub repository">GitHub <span class="ext">↗</span></a>
+        
+        <button id="theme-toggle" type="button" title="Toggle light/dark" aria-label="Toggle theme">
+          <span class="icon-dark">🌙</span><span class="icon-light">☀️</span>
+        </button>
+      </nav>
+    </header>
+    <div class="crumbs-strip">
+      <span class="crumb-group">General</span>
+      <span class="crumb-sep">›</span>
+      <span class="crumb-page">OSCP Prep Repository</span>
+    </div>
+    <article class="markdown-body">
+      <h1 id="oscp-prep-repository">OSCP Prep Repository</h1>
+<p>Personal OSCP preparation notes, methodology, and retired-HTB machine writeups, with a small Flask web app to browse everything in one place.</p>
+<p>🌐 <strong>Live GitHub Pages Site</strong>: <a href="https://shruthi-poojari.github.io/oscp_learning/">https://shruthi-poojari.github.io/oscp_learning/</a></p>
+<blockquote>
+<p>Authorized lab / OSCP learning use only (HTB retired machines, PWK labs, systems you own or are contracted to test).</p>
+</blockquote>
+<hr />
+<h2 id="repository-layout">Repository Layout</h2>
+<div class="codehilite"><pre><span></span><code><span class="o">.</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">OSCP</span><span class="o">-</span><span class="n">Methodology</span><span class="o">.</span><span class="n">md</span><span class="w">       </span><span class="c1"># master methodology, port reference, tool notes, exam checklist</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">Notes</span><span class="o">/</span><span class="w">                    </span><span class="c1"># per-topic reference notes</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">Nmap</span><span class="o">.</span><span class="n">md</span><span class="w">   </span><span class="n">SMB</span><span class="o">.</span><span class="n">md</span><span class="w">   </span><span class="n">FTP</span><span class="o">.</span><span class="n">md</span><span class="w">   </span><span class="n">HTTP</span><span class="o">.</span><span class="n">md</span><span class="w">   </span><span class="n">DNS</span><span class="o">.</span><span class="n">md</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">LDAP</span><span class="o">.</span><span class="n">md</span><span class="w">   </span><span class="n">MSSQL</span><span class="o">.</span><span class="n">md</span><span class="w"> </span><span class="n">WinRM</span><span class="o">.</span><span class="n">md</span><span class="w"> </span><span class="n">PrivEsc</span><span class="o">.</span><span class="n">md</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">Metasploit</span><span class="o">.</span><span class="n">md</span><span class="w">  </span><span class="n">Reverse</span><span class="o">-</span><span class="n">Shells</span><span class="o">.</span><span class="n">md</span><span class="w">  </span><span class="n">File</span><span class="o">-</span><span class="n">Transfer</span><span class="o">.</span><span class="n">md</span>
+<span class="err">├──</span><span class="w"> </span><span class="n">HTB</span><span class="o">/</span><span class="w">                      </span><span class="c1"># retired machine writeups</span>
+<span class="err">│</span><span class="w">   </span><span class="err">├──</span><span class="w"> </span><span class="n">Enigma</span><span class="o">.</span><span class="n">md</span><span class="w">   </span><span class="n">Lame</span><span class="o">.</span><span class="n">md</span><span class="w">   </span><span class="n">Legacy</span><span class="o">.</span><span class="n">md</span>
+<span class="err">│</span><span class="w">   </span><span class="err">└──</span><span class="w"> </span><span class="n">samples</span><span class="o">/</span><span class="w">              </span><span class="c1"># reference writeups (see note below)</span>
+<span class="err">└──</span><span class="w"> </span><span class="n">webapp</span><span class="o">/</span><span class="w">                   </span><span class="c1"># Flask notes viewer</span>
+</code></pre></div>
+
+<hr />
+<h2 id="running-the-web-app">Running the Web App</h2>
+<p>The app reads every <code>.md</code> file in this repo and serves it with a grouped sidebar,
+rendered tables, and syntax-highlighted code blocks.</p>
+<h3 id="1-one-time-setup">1. One-time setup</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>webapp
+python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+./.venv/bin/pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</code></pre></div>
+
+<h3 id="2-start-the-server">2. Start the server</h3>
+<div class="codehilite"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>webapp
+./.venv/bin/python<span class="w"> </span>app.py
+</code></pre></div>
+
+<p>Leave this terminal open. You should see:</p>
+<div class="codehilite"><pre><span></span><code> <span class="k">*</span> Running on http://127.0.0.1:5000
+</code></pre></div>
+
+<h3 id="3-open-in-a-browser">3. Open in a browser</h3>
+<p>Go to <strong><a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a></strong> — it redirects to the methodology guide, and the
+sidebar links to every note. Stop the server anytime with <strong>Ctrl+C</strong>.</p>
+<hr />
+<h2 id="direct-page-urls">Direct Page URLs</h2>
+<table>
+<thead>
+<tr>
+<th>Note</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Methodology (home)</td>
+<td><a href="http://127.0.0.1:5000/view/OSCP-Methodology.md">http://127.0.0.1:5000/view/OSCP-Methodology.md</a></td>
+</tr>
+<tr>
+<td>HTB — Enigma</td>
+<td><a href="http://127.0.0.1:5000/view/HTB/Enigma.md">http://127.0.0.1:5000/view/HTB/Enigma.md</a></td>
+</tr>
+<tr>
+<td>HTB — Lame</td>
+<td><a href="http://127.0.0.1:5000/view/HTB/Lame.md">http://127.0.0.1:5000/view/HTB/Lame.md</a></td>
+</tr>
+<tr>
+<td>HTB — Legacy</td>
+<td><a href="http://127.0.0.1:5000/view/HTB/Legacy.md">http://127.0.0.1:5000/view/HTB/Legacy.md</a></td>
+</tr>
+<tr>
+<td>Nmap</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/Nmap.md">http://127.0.0.1:5000/view/Notes/Nmap.md</a></td>
+</tr>
+<tr>
+<td>SMB</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/SMB.md">http://127.0.0.1:5000/view/Notes/SMB.md</a></td>
+</tr>
+<tr>
+<td>FTP</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/FTP.md">http://127.0.0.1:5000/view/Notes/FTP.md</a></td>
+</tr>
+<tr>
+<td>HTTP</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/HTTP.md">http://127.0.0.1:5000/view/Notes/HTTP.md</a></td>
+</tr>
+<tr>
+<td>DNS</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/DNS.md">http://127.0.0.1:5000/view/Notes/DNS.md</a></td>
+</tr>
+<tr>
+<td>LDAP</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/LDAP.md">http://127.0.0.1:5000/view/Notes/LDAP.md</a></td>
+</tr>
+<tr>
+<td>MSSQL</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/MSSQL.md">http://127.0.0.1:5000/view/Notes/MSSQL.md</a></td>
+</tr>
+<tr>
+<td>WinRM</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/WinRM.md">http://127.0.0.1:5000/view/Notes/WinRM.md</a></td>
+</tr>
+<tr>
+<td>Privilege Escalation</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/PrivEsc.md">http://127.0.0.1:5000/view/Notes/PrivEsc.md</a></td>
+</tr>
+<tr>
+<td>Metasploit</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/Metasploit.md">http://127.0.0.1:5000/view/Notes/Metasploit.md</a></td>
+</tr>
+<tr>
+<td>Reverse Shells</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/Reverse-Shells.md">http://127.0.0.1:5000/view/Notes/Reverse-Shells.md</a></td>
+</tr>
+<tr>
+<td>File Transfer</td>
+<td><a href="http://127.0.0.1:5000/view/Notes/File-Transfer.md">http://127.0.0.1:5000/view/Notes/File-Transfer.md</a></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>New <code>.md</code> files are picked up automatically — just reload the page, no restart needed.</p>
+</blockquote>
+<hr />
+<h2 id="troubleshooting">Troubleshooting</h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ERR_CONNECTION_REFUSED</code></td>
+<td>The server isn't running — start <code>app.py</code> first and keep the terminal open.</td>
+</tr>
+<tr>
+<td>Port 5000 already in use (macOS AirPlay)</td>
+<td>Change <code>port=5000</code> in <a href="webapp/app.py">webapp/app.py</a> to e.g. <code>8000</code>, then open <code>127.0.0.1:8000</code>. Or disable AirPlay Receiver in System Settings.</td>
+</tr>
+<tr>
+<td><code>ModuleNotFoundError</code></td>
+<td>Run with the venv python: <code>./.venv/bin/python app.py</code> (not bare <code>python</code>).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="notes-on-htbsamples">Notes on <code>HTB/samples/</code></h2>
+<p>The files under <code>HTB/samples/</code> are derived from a third-party public writeup
+(originally by <strong>svachal / @7h3rAm</strong>) and were kept as a format reference.
+<code>HTB/Lame.md</code> and <code>HTB/Legacy.md</code> are original notes. If you want a repo with no
+third-party-derived content, delete the <code>samples/</code> folder.</p>
+    </article>
+  </main>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    const filter = document.getElementById('filter');
+    filter.addEventListener('input', () => {
+      const q = filter.value.toLowerCase();
+      document.querySelectorAll('.sidebar li').forEach(li => {
+        li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+      document.querySelectorAll('.group').forEach(g => {
+        const any = [...g.querySelectorAll('li')].some(li => li.style.display !== 'none');
+        g.style.display = any ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
