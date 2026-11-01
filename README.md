@@ -2,6 +2,8 @@
 
 Personal OSCP preparation notes, methodology, and retired-HTB machine writeups, with a small Flask web app to browse everything in one place.
 
+🌐 **Live GitHub Pages Site**: [https://shruthi-poojari.github.io/oscp_learning/](https://shruthi-poojari.github.io/oscp_learning/)
+
 > Authorized lab / OSCP learning use only (HTB retired machines, PWK labs, systems you own or are contracted to test).
 
 ---
