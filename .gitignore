@@ -3,3 +3,5 @@ webapp/.venv/
 __pycache__/
 *.pyc
 .DS_Store
+dist/
+_site/
