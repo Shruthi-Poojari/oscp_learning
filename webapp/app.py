@@ -26,7 +26,7 @@ GROUP_LABELS = {
 }
 
 # Set this to your repo URL after you push (tomorrow) to show a GitHub link in the header.
-REPO_URL = ""
+REPO_URL = "https://github.com/Shruthi-Poojari/oscp_learning"
 
 MD_EXTENSIONS = ["fenced_code", "tables", "codehilite", "toc", "sane_lists"]
 PYGMENTS_CSS = HtmlFormatter(style="monokai").get_style_defs(".codehilite")
