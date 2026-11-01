@@ -9,7 +9,7 @@ import os
 from pathlib import Path
 
 import markdown
-from flask import Flask, abort, redirect, render_template, url_for
+from flask import Flask, abort, redirect, render_template, send_from_directory, url_for
 from pygments.formatters import HtmlFormatter
 
 app = Flask(__name__)
@@ -104,6 +104,13 @@ def view(slug):
         repo_url=REPO_URL,
         pygments_css=PYGMENTS_CSS,
     )
+
+
+@app.route("/HTB/assets/<path:filename>")
+@app.route("/view/HTB/assets/<path:filename>")
+@app.route("/assets/<path:filename>")
+def htb_assets(filename):
+    return send_from_directory(CONTENT_ROOT / "HTB" / "assets", filename)
 
 
 if __name__ == "__main__":

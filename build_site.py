@@ -75,6 +75,11 @@ def build(output_dir="dist", base_url=""):
     static_dst = out / "static"
     shutil.copytree(ROOT / "webapp" / "static", static_dst)
 
+    # Copy HTB assets if present
+    htb_assets = ROOT / "HTB" / "assets"
+    if htb_assets.exists():
+        shutil.copytree(htb_assets, out / "HTB" / "assets", dirs_exist_ok=True)
+
     # Set up Jinja environment with url_for mock
     def static_url_for(endpoint, **values):
         b = base_url.rstrip("/")

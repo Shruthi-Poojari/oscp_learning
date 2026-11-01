@@ -18,7 +18,7 @@ Personal OSCP preparation notes, methodology, and retired-HTB machine writeups, 
 │   ├── LDAP.md   MSSQL.md WinRM.md PrivEsc.md
 │   ├── Metasploit.md  Reverse-Shells.md  File-Transfer.md
 ├── HTB/                      # retired machine writeups
-│   ├── Lame.md   Legacy.md
+│   ├── Enigma.md   Lame.md   Legacy.md
 │   └── samples/              # reference writeups (see note below)
 └── webapp/                   # Flask notes viewer
 ```
@@ -59,6 +59,7 @@ sidebar links to every note. Stop the server anytime with **Ctrl+C**.
 | Note | URL |
 |------|-----|
 | Methodology (home) | <http://127.0.0.1:5000/view/OSCP-Methodology.md> |
+| HTB — Enigma | <http://127.0.0.1:5000/view/HTB/Enigma.md> |
 | HTB — Lame | <http://127.0.0.1:5000/view/HTB/Lame.md> |
 | HTB — Legacy | <http://127.0.0.1:5000/view/HTB/Legacy.md> |
 | Nmap | <http://127.0.0.1:5000/view/Notes/Nmap.md> |
