@@ -19,6 +19,31 @@
 
 ---
 
+## Executive Summary (Layman's Explanation for Management)
+
+> **Quick 60-Second Elevator Pitch for Managers:**
+> "We performed an end-to-end security assessment on **Enigma**, a simulated Linux-based cryptographic messaging platform. We successfully identified two critical security flaws that allowed us to move from an unauthenticated external visitor all the way to complete administrative control (Root) of the server."
+
+### What We Did (The 2-Step Attack Story):
+
+1. **Step 1: Gaining Initial Entry (The Web Application Flaw)**
+   - **The Situation**: The target runs a web application that decrypts secret messages.
+   - **The Problem**: When the application processes incoming requests, it doesn't validate or clean hidden properties in the data structure (*Prototype Pollution*).
+   - **The Analogy**: Imagine filling out a standard hotel check-in form, but writing a hidden note on the back that says *"Grant room-service master key access"*. Because the receptionist processes the entire sheet without double-checking the back, you are handed the key.
+   - **The Result**: We triggered this flaw to execute code on the server, gaining initial access as a normal standard employee user (`gerard`).
+
+2. **Step 2: Escalating to Full System Administrator (The Privilege Flaw)**
+   - **The Situation**: The server had an automated backup script designed to back up files every day with full system administrator (`root`) privileges.
+   - **The Problem**: When the backup script ran the archiving tool (`tar`), it didn't specify the exact official file location (like `/usr/bin/tar`), but instead just called `tar` by name.
+   - **The Analogy**: Imagine a high-security automated cleaning machine that has master-key access to every vault in the building. It is programmed to pick up a tool called *"hammer"*. If an employee leaves a custom fake hammer in the front hallway, the machine picks up that fake hammer and uses it with full administrator authority.
+   - **The Result**: We created a custom tool named `tar`, instructed the administrator script to run it, and immediately gained full root control of the entire server.
+
+### Business Impact & Remediation Takeaways:
+- **Input Validation**: Web applications must rigorously filter and sanitize all structured JSON input before processing.
+- **Secure Automation**: All administrator/automated scripts must strictly use absolute paths (e.g. `/usr/bin/tar`) and restrict environment variables to prevent unauthorized hijacking.
+
+---
+
 ## High-Level Attack Chain
 
 ```mermaid
